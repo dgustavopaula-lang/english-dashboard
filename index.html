@@ -1,0 +1,338 @@
+cat > ~/Documentos/sistema-root/Projetos/English-Dashboard/index.html << 'EOF' <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>English Dashboard — Professor Particular</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --bg: #0d0d0d;
+        --card: #1a1a1a;
+        --orange: #ff6a00;
+        --orange-light: #ff8c38;
+        --white: #f5f5f5;
+        --gray: #888;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--white);
+        font-family: 'Segoe UI', sans-serif;
+      }
+
+      /* NAV */
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 2.5rem;
+        border-bottom: 1px solid #222;
+        position: sticky;
+        top: 0;
+        background: var(--bg);
+        z-index: 100;
+      }
+
+      .logo {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--orange);
+        letter-spacing: 1px;
+      }
+
+      .logo span {
+        color: var(--white);
+      }
+
+      nav a {
+        color: var(--gray);
+        text-decoration: none;
+        margin-left: 1.8rem;
+        font-size: 0.95rem;
+        transition: color 0.2s;
+      }
+
+      nav a:hover {
+        color: var(--orange);
+      }
+
+      .btn-nav {
+        background: var(--orange);
+        color: #000 !important;
+        font-weight: 700;
+        padding: 0.5rem 1.2rem;
+        border-radius: 6px;
+      }
+
+      /* HERO */
+      .hero {
+        min-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+        background: radial-gradient(ellipse at top, #1a0a00 0%, #0d0d0d 70%);
+      }
+
+      .badge {
+        background: #1f1000;
+        border: 1px solid var(--orange);
+        color: var(--orange);
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+      }
+
+      .hero h1 {
+        font-size: clamp(2rem, 6vw, 4rem);
+        font-weight: 800;
+        line-height: 1.15;
+        max-width: 800px;
+        margin-bottom: 1.2rem;
+      }
+
+      .hero h1 span {
+        color: var(--orange);
+      }
+
+      .hero p {
+        color: var(--gray);
+        font-size: 1.1rem;
+        max-width: 540px;
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+      }
+
+      .hero-btns {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .btn-primary {
+        background: var(--orange);
+        color: #000;
+        font-weight: 700;
+        padding: 0.9rem 2rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: background 0.2s;
+      }
+
+      .btn-primary:hover {
+        background: var(--orange-light);
+      }
+
+      .btn-secondary {
+        border: 1px solid #444;
+        color: var(--white);
+        padding: 0.9rem 2rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: border-color 0.2s;
+      }
+
+      .btn-secondary:hover {
+        border-color: var(--orange);
+        color: var(--orange);
+      }
+
+      /* FEATURES */
+      .features {
+        padding: 5rem 2rem;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .section-sub {
+        text-align: center;
+        color: var(--gray);
+        margin-bottom: 3rem;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid #2a2a2a;
+        border-radius: 12px;
+        padding: 2rem;
+        transition: border-color 0.2s;
+      }
+
+      .card:hover {
+        border-color: var(--orange);
+      }
+
+      .card-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      .card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .card p {
+        color: var(--gray);
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      /* PLATAFORMA */
+      .platform {
+        background: #111;
+        padding: 5rem 2rem;
+        text-align: center;
+      }
+
+      .platform-box {
+        max-width: 600px;
+        margin: 2rem auto 0;
+        background: var(--card);
+        border: 1px solid #2a2a2a;
+        border-radius: 16px;
+        padding: 2.5rem;
+      }
+
+      .platform-box p {
+        color: var(--gray);
+        margin-bottom: 1.5rem;
+        line-height: 1.7;
+      }
+
+      .online-badges {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+      }
+
+      .obadge {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        padding: 0.5rem 1.2rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: var(--white);
+      }
+
+      /* FOOTER */
+      footer {
+        border-top: 1px solid #222;
+        padding: 2rem;
+        text-align: center;
+        color: var(--gray);
+        font-size: 0.85rem;
+      }
+
+      footer span {
+        color: var(--orange);
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- NAV -->
+    <nav>
+      <div class="logo">English<span>Dashboard</span></div>
+      <div>
+        <a href="#recursos">Recursos</a>
+        <a href="#plataforma">Plataforma</a>
+        <a href="#plataforma" class="btn-nav">Acessar →</a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="badge">🇺🇸 Aulas Online de Inglês</div>
+      <h1>Aprenda inglês com <span>método, consistência</span> e resultado real.</h1>
+      <p>Aulas particulares via Zoom ou Skype. Horários flexíveis, material personalizado e acompanhamento completo do
+        seu progresso.</p>
+      <div class="hero-btns">
+        <a href="#plataforma" class="btn-primary">Acessar a Plataforma</a>
+        <a href="#recursos" class="btn-secondary">Ver como funciona</a>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features" id="recursos">
+      <h2 class="section-title">Tudo que você precisa</h2>
+      <p class="section-sub">Uma plataforma completa para o aluno e o professor.</p>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">📅</div>
+          <h3>Horários Organizados</h3>
+          <p>Agende suas aulas e visualize todos os seus compromissos em um só lugar.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📂</div>
+          <h3>Material Didático</h3>
+          <p>Acesse PDFs, exercícios e conteúdos exclusivos enviados pelo professor.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <h3>Controle de Progresso</h3>
+          <p>Acompanhe sua evolução aula a aula com registros e feedback do professor.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">💬</div>
+          <h3>Aulas ao Vivo</h3>
+          <p>Conecte-se via Zoom ou Skype diretamente pela plataforma, sem complicação.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLATAFORMA -->
+    <section class="platform" id="plataforma">
+      <h2 class="section-title">Acesse a Plataforma</h2>
+      <p class="section-sub">Área exclusiva para alunos matriculados.</p>
+      <div class="platform-box">
+        <p>Entre com seu acesso para visualizar horários, materiais e iniciar sua aula online.</p>
+        <div class="online-badges">
+          <span class="obadge">📹 Zoom</span>
+          <span class="obadge">💻 Skype</span>
+          <span class="obadge">📄 Materiais PDF</span>
+        </div>
+        <a href="#" class="btn-primary">Entrar na Plataforma →</a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>© 2025 <span>EnglishDashboard</span> — Aulas Particulares de Inglês Online</p>
+    </footer>
+
+  </body>
+
+  </html>
+  EOF
