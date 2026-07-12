@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>English Dashboard — Área do Aluno</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{--bg:#0d0d0d;--card:#1a1a1a;--orange:#ff6a00;--white:#f5f5f5;--gray:#888;--green:#00c853;--red:#ff1744;}
+    body{background:var(--bg);color:var(--white);font-family:'Segoe UI',sans-serif;min-height:100vh;}
+
+    /* NAV */
+    nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;border-bottom:1px solid #222;background:var(--bg);position:sticky;top:0;z-index:100;}
+    .logo{font-size:1.3rem;font-weight:700;color:var(--orange);}
+    .logo span{color:var(--white);}
+    .nav-link{color:var(--gray);text-decoration:none;font-size:0.9rem;}
+    .nav-link:hover{color:var(--orange);}
+
+    /* TELAS */
+    .screen{display:none;padding:2rem;max-width:900px;margin:0 auto;}
+    .screen.active{display:block;}
+
+    /* CARDS DE PLANO */
+    .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;margin:2rem 0;}
+    .plan-card{background:var(--card);border:2px solid #2a2a2a;border-radius:16px;padding:2rem;cursor:pointer;transition:all 0.2s;position:relative;}
+    .plan-card:hover,.plan-card.selected{border-color:var(--orange);}
+    .plan-card.selected::after{content:'✓';position:absolute;top:1rem;right:1rem;background:var(--orange);color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;}
+    .plan-badge{background:var(--orange);color:#000;font-size:0.7rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:20px;display:inline-block;margin-bottom:0.8rem;text-transform:uppercase;}
+    .plan-name{font-size:1.2rem;font-weight:700;margin-bottom:0.3rem;}
+    .plan-price{font-size:2rem;font-weight:800;color:var(--orange);margin:0.5rem 0;}
+    .plan-price span{font-size:0.9rem;color:var(--gray);font-weight:400;}
+    .plan-features{list-style:none;margin-top:1rem;}
+    .plan-features li{color:var(--gray);font-size:0.85rem;padding:0.3rem 0;border-bottom:1px solid #222;}
+    .plan-features li::before{content:'→ ';color:var(--orange);}
+
+    /* FORMS */
+    .form-box{background:var(--card);border:1px solid #2a2a2a;border-radius:16px;padding:2rem;max-width:480px;margin:0 auto;}
+    .form-title{font-size:1.4rem;font-weight:700;margin-bottom:0.3rem;}
+    .form-sub{color:var(--gray);font-size:0.9rem;margin-bottom:1.5rem;}
+    .form-group{margin-bottom:1.2rem;}
+    label{display:block;font-size:0.85rem;color:var(--gray);margin-bottom:0.4rem;}
+    input,select{width:100%;background:#111;border:1px solid #333;color:var(--white);padding:0.75rem 1rem;border-radius:8px;font-size:0.95rem;outline:none;transition:border-color 0.2s;}
+    input:focus,select:focus{border-color:var(--orange);}
+    .btn{width:100%;background:var(--orange);color:#000;font-weight:700;padding:0.9rem;border:none;border-radius:8px;font-size:1rem;cursor:pointer;transition:opacity 0.2s;margin-top:0.5rem;}
+    .btn:hover{opacity:0.85;}
+    .btn-ghost{background:transparent;border:1px solid #444;color:var(--white);margin-top:0.8rem;}
+    .btn-ghost:hover{border-color:var(--orange);color:var(--orange);}
+    .form-switch{text-align:center;margin-top:1rem;color:var(--gray);font-size:0.85rem;}
+    .form-switch a{color:var(--orange);cursor:pointer;text-decoration:none;}
+
+    /* STATUS BADGE */
+    .status{display:inline-block;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.75rem;font-weight:700;}
+    .status.pending{background:#1a1000;color:#ff9800;border:1px solid #ff9800;}
+    .status.approved{background:#001a0a;color:var(--green);border:1px solid var(--green);}
+    .status.rejected{background:#1a0005;color:var(--red);border:1px solid var(--red);}
+
+    /* DASHBOARD ALUNO */
+    .dash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
+    .dash-title{font-size:1.6rem;font-weight:700;}
+    .dash-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;}
+    .dash-card{background:var(--card);border:1px solid #2a2a2a;border-radius:12px;padding:1.5rem;}
+    .dash-card h4{color:var(--gray);font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.5rem;}
+    .dash-card p{font-size:1.4rem;font-weight:700;color:var(--orange);}
+
+    /* PAINEL PROFESSOR */
+    .table-wrap{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;margin-top:1rem;}
+    th{background:#111;color:var(--gray);font-size:0.8rem;text-transform:uppercase;padding:0.8rem 1rem;text-align:left;border-bottom:1px solid #222;}
+    td{padding:0.9rem 1rem;border-bottom:1px solid #1a1a1a;font-size:0.9rem;vertical-align:middle;}
+    tr:hover td{background:#111;}
+    .action-btn{padding:0.3rem 0.8rem;border:none;border-radius:6px;font-size:0.75rem;font-weight:700;cursor:pointer;margin:0 0.2rem;}
+    .approve-btn{background:var(--green);color:#000;}
+    .reject-btn{background:var(--red);color:#fff;}
+
+    /* AGUARDANDO */
+    .waiting-box{text-align:center;padding:4rem 2rem;}
+    .waiting-box .icon{font-size:4rem;margin-bottom:1rem;}
+    .waiting-box h2{font-size:1.5rem;margin-bottom:0.5rem;}
+    .waiting-box p{color:var(--gray);max-width:400px;margin:0 auto;}
+
+    /* PAGE TITLE */
+    .page-title{font-size:1.8rem;font-weight:700;margin-bottom:0.3rem;}
+    .page-sub{color:var(--gray);margin-bottom:2rem;}
+
+    .alert{background:#1a0800;border:1px solid var(--orange);color:var(--orange);padding:0.8rem 1rem;border-radius:8px;margin-bottom:1rem;font-size:0.85rem;display:none;}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">English<span>Dashboard</span></div>
+  <a href="index.html" class="nav-link">← Voltar ao site</a>
+</nav>
+
+<!-- TELA 1: ESCOLHA DE PLANO -->
+<div class="screen active" id="screen-plans">
+  <h1 class="page-title">Escolha seu Plano</h1>
+  <p class="page-sub">Selecione o plano ideal para você e faça seu cadastro.</p>
+  <div class="plans">
+    <div class="plan-card" onclick="selectPlan(this,'essencial')">
+      <span class="plan-badge">Essencial</span>
+      <div class="plan-name">Plano Essencial</div>
+      <div class="plan-price">R$320<span>/mês</span></div>
+      <ul class="plan-features">
+        <li>1 aula por semana</li>
+        <li>50 minutos por aula</li>
+        <li>Material didático incluso</li>
+        <li>Acesso à plataforma</li>
+      </ul>
+    </div>
+    <div class="plan-card" onclick="selectPlan(this,'recomendado')">
+      <span class="plan-badge" style="background:#fff;color:#000;">⭐ Recomendado</span>
+      <div class="plan-name">Plano Recomendado</div>
+      <div class="plan-price">R$576<span>/mês</span></div>
+      <ul class="plan-features">
+        <li>2 aulas por semana</li>
+        <li>50 minutos por aula</li>
+        <li>10% de desconto</li>
+        <li>Material didático incluso</li>
+        <li>Acesso à plataforma</li>
+      </ul>
+    </div>
+    <div class="plan-card" onclick="selectPlan(this,'vip')">
+      <span class="plan-badge" style="background:#gold;background:#c8a400;color:#000;">✈️ VIP</span>
+      <div class="plan-name">Plano Exclusivo VIP</div>
+      <div class="plan-price">R$1.000<span>/mês</span></div>
+      <ul class="plan-features">
+        <li>3 aulas por semana</li>
+        <li>50 minutos por aula</li>
+        <li>Acompanhamento personalizado</li>
+        <li>Tira-dúvidas ilimitado</li>
+        <li>Foco em viagens e conversação</li>
+        <li>Pagamento à vista</li>
+      </ul>
+    </div>
+  </div>
+  <div style="text-align:center;">
+    <button class="btn" style="max-width:300px;" onclick="goToRegister()">Continuar com este plano →</button>
+    <br><br>
+    <span style="color:var(--gray);font-size:0.85rem;">Já tem cadastro? <a style="color:var(--orange);cursor:pointer;" onclick="showScreen('screen-login')">Entrar aqui</a></span>
+  </div>
+</div>
+
+<!-- TELA 2: CADASTRO ALUNO -->
+<div class="screen" id="screen-register">
+  <div class="form-box">
+    <div class="form-title">Criar Conta</div>
+    <div class="form-sub">Preencha seus dados para solicitar acesso.</div>
+    <div class="alert" id="alert-register"></div>
+    <div class="form-group">
+      <label>Nome completo</label>
+      <input type="text" id="reg-name" placeholder="Seu nome"/>
+    </div>
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" id="reg-email" placeholder="seu@email.com"/>
+    </div>
+    <div class="form-group">
+      <label>Senha</label>
+      <input type="password" id="reg-pass" placeholder="Crie uma senha"/>
+    </div>
+    <div class="form-group">
+      <label>Plano selecionado</label>
+      <input type="text" id="reg-plan" readonly style="opacity:0.6;"/>
+    </div>
+    <div class="form-group">
+      <label>Nível de inglês</label>
+      <select id="reg-level">
+        <option value="">Selecione...</option>
+        <option>Iniciante</option>
+        <option>Básico</option>
+        <option>Intermediário</option>
+        <option>Avançado</option>
+      </select>
+    </div>
+    <button class="btn" onclick="register()">Solicitar Acesso</button>
+    <button class="btn btn-ghost" onclick="showScreen('screen-plans')">← Voltar</button>
+  </div>
+</div>
+
+<!-- TELA 3: AGUARDANDO APROVAÇÃO -->
+<div class="screen" id="screen-waiting">
+  <div class="waiting-box">
+    <div class="icon">⏳</div>
+    <h2>Cadastro enviado!</h2>
+    <p>Seu cadastro foi recebido. Após a confirmação do pagamento, o professor liberará seu acesso em até 24 horas.</p>
+    <br>
+    <span class="status pending">Aguardando aprovação</span>
+    <br><br>
+    <button class="btn" style="max-width:200px;" onclick="logout()">Sair</button>
+  </div>
+</div>
+
+<!-- TELA 4: DASHBOARD ALUNO -->
+<div class="screen" id="screen-student">
+  <div class="dash-header">
+    <div>
+      <div class="dash-title">Olá, <span id="student-name">Aluno</span>! 👋</div>
+      <div style="color:var(--gray);font-size:0.9rem;">Bem-vindo à sua área de estudos</div>
+    </div>
+    <button class="btn" style="width:auto;padding:0.5rem 1.2rem;" onclick="logout()">Sair</button>
+  </div>
+  <div class="dash-cards">
+    <div class="dash-card">
+      <h4>Plano Ativo</h4>
+      <p id="student-plan">—</p>
+    </div>
+    <div class="dash-card">
+      <h4>Próxima Aula</h4>
+      <p>A definir</p>
+    </div>
+    <div class="dash-card">
+      <h4>Aulas no Mês</h4>
+      <p id="student-classes">—</p>
+    </div>
+    <div class="dash-card">
+      <h4>Status</h4>
+      <p style="color:#00c853;font-size:1rem;">✅ Ativo</p>
+    </div>
+  </div>
+  <div style="background:var(--card);border:1px solid #2a2a2a;border-radius:12px;padding:1.5rem;">
+    <h3 style="margin-bottom:1rem;">📂 Materiais Didáticos</h3>
+    <p style="color:var(--gray);font-size:0.9rem;">O professor adicionará materiais em breve. Fique ligado!</p>
+  </div>
+  <div style="background:var(--card);border:1px solid #2a2a2a;border-radius:12px;padding:1.5rem;margin-top:1rem;">
+    <h3 style="margin-bottom:1rem;">📅 Horários das Aulas</h3>
+    <p style="color:var(--gray);font-size:0.9rem;">Entre em contato com o professor para agendar seus horários via Zoom ou Skype.</p>
+  </div>
+</div>
+
+<!-- TELA 5: LOGIN -->
+<div class="screen" id="screen-login">
+  <div class="form-box">
+    <div class="form-title">Entrar</div>
+    <div class="form-sub">Acesse sua conta de aluno ou área do professor.</div>
+    <div class="alert" id="alert-login"></div>
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" id="login-email" placeholder="seu@email.com"/>
+    </div>
+    <div class="form-group">
+      <label>Senha</label>
+      <input type="password" id="login-pass" placeholder="Sua senha"/>
+    </div>
+    <button class="btn" onclick="login()">Entrar</button>
+    <div class="form-switch">Não tem conta? <a onclick="showScreen('screen-plans')">Cadastre-se</a></div>
+  </div>
+</div>
+
+<!-- TELA 6: PAINEL PROFESSOR -->
+<div class="screen" id="screen-teacher">
+  <div class="dash-header">
+    <div>
+      <div class="dash-title">Painel do Professor 👨‍🏫</div>
+      <div style="color:var(--gray);font-size:0.9rem;">Gerencie seus alunos e solicitações</div>
+    </div>
+    <button class="btn" style="width:auto;padding:0.5rem 1.2rem;" onclick="logout()">Sair</button>
+  </div>
+  <div class="dash-cards">
+    <div class="dash-card">
+      <h4>Total de Alunos</h4>
+      <p id="count-total">0</p>
+    </div>
+    <div class="dash-card">
+      <h4>Ativos</h4>
+      <p id="count-active" style="color:#00c853;">0</p>
+    </div>
+    <div class="dash-card">
+      <h4>Aguardando</h4>
+      <p id="count-pending" style="color:#ff9800;">0</p>
+    </div>
+  </div>
+  <div style="background:var(--card);border:1px solid #2a2a2a;border-radius:12px;padding:1.5rem;">
+    <h3 style="margin-bottom:1rem;">📋 Lista de Alunos</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Plano</th>
+            <th>Nível</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="students-table">
+          <tr><td colspan="6" style="color:var(--gray);text-align:center;padding:2rem;">Nenhum aluno cadastrado ainda.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // DADOS INICIAIS
+  const TEACHER = { email: 'professor@english.com', pass: 'admin123' };
+  let selectedPlan = '';
+
+  const planLabels = {
+    essencial: 'Essencial — R$320/mês',
+    recomendado: 'Recomendado — R$576/mês',
+    vip: 'Exclusivo VIP — R$1.000/mês'
+  };
+  const planClasses = { essencial: 4, recomendado: 8, vip: 12 };
+
+  function getStudents() { return JSON.parse(localStorage.getItem('ed_students') || '[]'); }
+  function saveStudents(s) { localStorage.setItem('ed_students', JSON.stringify(s)); }
+  function getSession() { return JSON.parse(localStorage.getItem('ed_session') || 'null'); }
+  function saveSession(s) { localStorage.setItem('ed_session', JSON.stringify(s)); }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function showAlert(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 4000);
+  }
+
+  function selectPlan(el, plan) {
+    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedPlan = plan;
+  }
+
+  function goToRegister() {
+    if (!selectedPlan) { alert('Selecione um plano primeiro!'); return; }
+    document.getElementById('reg-plan').value = planLabels[selectedPlan];
+    showScreen('screen-register');
+  }
+
+  function register() {
+    const name = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const pass = document.getElementById('reg-pass').value;
+    const level = document.getElementById('reg-level').value;
+    if (!name || !email || !pass || !level) { showAlert('alert-register','Preencha todos os campos.'); return; }
+    const students = getStudents();
+    if (students.find(s => s.email === email)) { showAlert('alert-register','E-mail já cadastrado.'); return; }
+    students.push({ name, email, pass, plan: selectedPlan, level, status: 'pending' });
+    saveStudents(students);
+    saveSession({ type: 'student', email });
+    showScreen('screen-waiting');
+  }
+
+  function login() {
+    const email = document.getElementById('login-email').value.trim();
+    const pass = document.getElementById('login-pass').value;
+    if (email === TEACHER.email && pass === TEACHER.pass) {
+      saveSession({ type: 'teacher', email });
+      loadTeacher();
+      showScreen('screen-teacher');
+      return;
+    }
+    const students = getStudents();
+    const s = students.find(st => st.email === email && st.pass === pass);
+    if (!s) { showAlert('alert-login','E-mail ou senha incorretos.'); return; }
+    saveSession({ type: 'student', email });
+    if (s.status === 'pending') { showScreen('screen-waiting'); return; }
+    if (s.status === 'approved') { loadStudent(s); showScreen('screen-student'); return; }
+    showAlert('alert-login','Acesso não autorizado.');
+  }
+
+  function loadStudent(s) {
+    document.getElementById('student-name').textContent = s.name.split(' ')[0];
+    document.getElementById('student-plan').textContent = planLabels[s.plan] || s.plan;
+    document.getElementById('student-classes').textContent = planClasses[s.plan] || '—';
+  }
+
+  function loadTeacher() {
+    const students = getStudents();
+    const approved = students.filter(s => s.status === 'approved').length;
+    const pending = students.filter(s => s.status === 'pending').length;
+    document.getElementById('count-total').textContent = students.length;
+    document.getElementById('count-active').textContent = approved;
+    document.getElementById('count-pending').textContent = pending;
+    const tbody = document.getElementById('students-table');
+    if (!students.length) {
+      tbody.innerHTML = '<tr><td colspan="6" style="color:var(--gray);text-align:center;padding:2rem;">Nenhum aluno cadastrado ainda.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = students.map((s, i) => `
+      <tr>
+        <td>${s.name}</td>
+        <td>${s.email}</td>
+        <td>${planLabels[s.plan] || s.plan}</td>
+        <td>${s.level}</td>
+        <td><span class="status ${s.status}">${s.status === 'pending' ? 'Aguardando' : s.status === 'approved' ? 'Ativo' : 'Recusado'}</span></td>
+        <td>
+          ${s.status !== 'approved' ? `<button class="action-btn approve-btn" onclick="updateStatus(${i},'approved')">Aprovar</button>` : ''}
+          ${s.status !== 'rejected' ? `<button class="action-btn reject-btn" onclick="updateStatus(${i},'rejected')">Recusar</button>` : ''}
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function updateStatus(i, status) {
+    const students = getStudents();
+    students[i].status = status;
+    saveStudents(students);
+    loadTeacher();
+  }
+
+  function logout() {
+    localStorage.removeItem('ed_session');
+    showScreen('screen-plans');
+  }
+
+  // AUTO LOGIN
+  window.onload = () => {
+    const session = getSession();
+    if (!session) return;
+    if (session.type === 'teacher') { loadTeacher(); showScreen('screen-teacher'); return; }
+    const students = getStudents();
+    const s = students.find(st => st.email === session.email);
+    if (!s) return;
+    if (s.status === 'pending') { showScreen('screen-waiting'); return; }
+    if (s.status === 'approved') { loadStudent(s); showScreen('screen-student'); }
+  };
+</script>
+</body>
+</html>
