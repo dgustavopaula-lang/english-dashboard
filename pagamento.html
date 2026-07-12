@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pagamento — English Dashboard</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{--bg:#0d0d0d;--card:#1a1a1a;--orange:#ff6a00;--white:#f5f5f5;--gray:#888;--green:#00c853;}
+    body{background:var(--bg);color:var(--white);font-family:'Segoe UI',sans-serif;min-height:100vh;}
+    nav{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;border-bottom:1px solid #222;background:var(--bg);position:sticky;top:0;z-index:100;}
+    .logo{font-size:1.3rem;font-weight:700;color:var(--orange);}
+    .logo span{color:var(--white);}
+    nav a{color:var(--gray);text-decoration:none;font-size:0.9rem;}
+    nav a:hover{color:var(--orange);}
+
+    .container{max-width:600px;margin:3rem auto;padding:0 1.5rem;}
+    .page-title{font-size:1.8rem;font-weight:700;margin-bottom:0.3rem;}
+    .page-sub{color:var(--gray);margin-bottom:2rem;}
+
+    .plan-summary{background:var(--card);border:1px solid #2a2a2a;border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+    .plan-summary h3{font-size:1rem;color:var(--gray);margin-bottom:0.3rem;}
+    .plan-summary p{font-size:1.3rem;font-weight:700;}
+    .plan-price-big{font-size:2rem;font-weight:800;color:var(--orange);}
+
+    .pix-box{background:var(--card);border:1px solid #2a2a2a;border-radius:16px;padding:2rem;text-align:center;}
+    .pix-icon{font-size:3rem;margin-bottom:1rem;}
+    .pix-box h2{font-size:1.3rem;font-weight:700;margin-bottom:0.5rem;}
+    .pix-box p{color:var(--gray);font-size:0.9rem;margin-bottom:1.5rem;line-height:1.6;}
+
+    .pix-key-box{background:#111;border:1px solid #333;border-radius:10px;padding:1.2rem;margin:1rem 0;}
+    .pix-key-label{font-size:0.75rem;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:0.5rem;}
+    .pix-key{font-size:1.1rem;font-weight:700;color:var(--orange);word-break:break-all;}
+
+    .btn-copy{width:100%;background:var(--orange);color:#000;font-weight:700;padding:0.9rem;border:none;border-radius:8px;font-size:1rem;cursor:pointer;margin-top:1rem;transition:opacity 0.2s;}
+    .btn-copy:hover{opacity:0.85;}
+    .btn-copy.copied{background:var(--green);color:#fff;}
+
+    .steps{text-align:left;margin:1.5rem 0;}
+    .steps h3{font-size:0.9rem;color:var(--gray);margin-bottom:1rem;text-transform:uppercase;letter-spacing:1px;}
+    .step{display:flex;gap:1rem;align-items:flex-start;margin-bottom:0.8rem;}
+    .step-num{background:var(--orange);color:#000;font-weight:700;font-size:0.8rem;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0.1rem;}
+    .step p{color:var(--gray);font-size:0.9rem;line-height:1.5;}
+
+    .alert-box{background:#001a0a;border:1px solid var(--green);border-radius:10px;padding:1rem 1.2rem;margin-top:1.5rem;text-align:left;}
+    .alert-box p{color:var(--green);font-size:0.85rem;line-height:1.6;}
+
+    .btn-back{display:block;text-align:center;margin-top:1.5rem;color:var(--gray);text-decoration:none;font-size:0.9rem;}
+    .btn-back:hover{color:var(--orange);}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">English<span>Dashboard</span></div>
+  <a href="dashboard.html">← Voltar</a>
+</nav>
+
+<div class="container">
+  <h1 class="page-title">Efetuar Pagamento</h1>
+  <p class="page-sub">Realize o pagamento via PIX para ativar seu acesso.</p>
+
+  <!-- Resumo do plano -->
+  <div class="plan-summary">
+    <div>
+      <h3>Plano selecionado</h3>
+      <p id="plan-name">—</p>
+    </div>
+    <div class="plan-price-big" id="plan-price">—</div>
+  </div>
+
+  <!-- PIX -->
+  <div class="pix-box">
+    <div class="pix-icon">💸</div>
+    <h2>Pagamento via PIX</h2>
+    <p>Copie a chave PIX abaixo, abra o app do seu banco e realize a transferência. Após o pagamento, o professor liberará seu acesso em até 24 horas.</p>
+
+    <div class="pix-key-box">
+      <div class="pix-key-label">Chave PIX (E-mail)</div>
+      <div class="pix-key" id="pix-key">dgustavopaula@gmail.com</div>
+    </div>
+
+    <button class="btn-copy" id="btn-copy" onclick="copyPix()">📋 Copiar Chave PIX</button>
+
+    <div class="steps">
+      <h3>Como pagar</h3>
+      <div class="step">
+        <div class="step-num">1</div>
+        <p>Abra o aplicativo do seu banco e acesse a opção <strong>PIX</strong>.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <p>Escolha <strong>Transferir via chave PIX</strong> e cole a chave copiada.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <p>Digite o valor do seu plano e confirme o pagamento.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <p>Salve o comprovante e aguarde a liberação do acesso em até <strong>24 horas</strong>.</p>
+      </div>
+    </div>
+
+    <div class="alert-box">
+      <p>✅ <strong>Após o pagamento</strong>, o professor receberá a confirmação e liberará seu acesso à plataforma. Você será notificado por e-mail.</p>
+    </div>
+  </div>
+
+  <a href="dashboard.html" class="btn-back">← Voltar ao cadastro</a>
+</div>
+
+<script>
+  const plans = {
+    essencial:   { name: 'Plano Essencial',       price: 'R$ 320,00' },
+    recomendado: { name: 'Plano Recomendado ⭐',  price: 'R$ 576,00' },
+    vip:         { name: 'Plano Exclusivo VIP ✈️', price: 'R$ 1.000,00' }
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  const plan = params.get('plano') || localStorage.getItem('ed_selected_plan') || 'essencial';
+
+  document.getElementById('plan-name').textContent = plans[plan]?.name || 'Plano Essencial';
+  document.getElementById('plan-price').textContent = plans[plan]?.price || 'R$ 320,00';
+
+  function copyPix() {
+    const key = document.getElementById('pix-key').textContent;
+    navigator.clipboard.writeText(key).then(() => {
+      const btn = document.getElementById('btn-copy');
+      btn.textContent = '✅ Chave copiada!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = '📋 Copiar Chave PIX';
+        btn.classList.remove('copied');
+      }, 3000);
+    });
+  }
+</script>
+</body>
+</html>
