@@ -1,0 +1,7 @@
+services:
+  - type: static
+    name: english-dashboard
+    env: static
+    branch: master
+    autoDeploy: true
+    publishPath: ./
