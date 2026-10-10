@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>English Dashboard — Professor Particular</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0d0d0d;
+      --panel: #141414;
+      --card: #1f1f1f;
+      --orange: #ff7a1f;
+      --orange-soft: #ff9660;
+      --white: #f5f5f5;
+      --gray: #a0a0a0;
+      --border: rgba(255, 106, 0, 0.18);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #171717 0%, #090909 58%, #050505 100%);
+      color: var(--white);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+    }
+
+    img,
+    svg {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    a {
+      transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    a:focus-visible,
+    button:focus-visible {
+      outline: 2px solid var(--orange);
+      outline-offset: 3px;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(13, 13, 13, 0.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 0;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: var(--orange);
+    }
+
+    .logo span {
+      color: var(--white);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover {
+      color: var(--white);
+    }
+
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--orange);
+      color: #111;
+      font-weight: 700;
+      padding: 0.78rem 1.3rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding: 5rem 0 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(255, 122, 31, 0.12), transparent 24%),
+        radial-gradient(circle at 75% 30%, rgba(255, 122, 31, 0.08), transparent 16%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 122, 31, 0.12);
+      border: 1px solid rgba(255, 122, 31, 0.3);
+      color: var(--orange);
+      padding: 0.75rem 1rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      margin-bottom: 1.75rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.6rem, 6vw, 4.4rem);
+      font-weight: 800;
+      line-height: 1.03;
+      letter-spacing: -0.03em;
+      max-width: 810px;
+      margin: 0 auto 1.4rem;
+    }
+
+    .hero h1 span {
+      color: var(--orange);
+    }
+
+    .hero p {
+      color: var(--gray);
+      font-size: 1.05rem;
+      max-width: 620px;
+      margin: 0 auto 2.6rem;
+    }
+
+    .hero-btns {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 999px;
+      font-weight: 700;
+      min-width: 180px;
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: #111;
+      padding: 1rem 1.9rem;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      background: var(--orange-soft);
+    }
+
+    .btn-secondary {
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: var(--white);
+      padding: 0.98rem 1.9rem;
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-1px);
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(2rem, 2.5vw, 2.6rem);
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--gray);
+      margin-bottom: 3rem;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.8;
+    }
+
+    .cards,
+    .steps,
+    .testimonials {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .cards {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .card,
+    .step,
+    .testimonial-card,
+    .platform-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: var(--shadow);
+      border-radius: 24px;
+      padding: 2rem;
+    }
+
+    .card:hover,
+    .step:hover,
+    .testimonial-card:hover,
+    .platform-box:hover {
+      border-color: var(--border);
+      transform: translateY(-3px);
+    }
+
+    .card-icon,
+    .step-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card h3,
+    .step h3,
+    .testimonial-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .card p,
+    .step p,
+    .testimonial-card p,
+    .platform-box p {
+      color: var(--gray);
+      font-size: 0.97rem;
+      line-height: 1.8;
+    }
+
+    .steps {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .testimonial-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .testimonial-card blockquote {
+      font-size: 1rem;
+      color: var(--white);
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .testimonial-card cite {
+      display: block;
+      color: var(--orange);
+      font-weight: 700;
+      margin-top: 0.8rem;
+    }
+
+    .pricing,
+    .contact {
+      padding: 5rem 0;
+    }
+
+    .pricing-cards,
+    .contact-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .pricing-cards {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .plan-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100%;
+      padding: 2rem;
+    }
+
+    .plan-card h3 {
+      margin-bottom: 0.8rem;
+    }
+
+    .price {
+      color: var(--orange);
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin: 1rem 0 1.2rem;
+    }
+
+    .plan-list {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 2rem;
+      color: var(--gray);
+      line-height: 1.9;
+    }
+
+    .plan-list li::before {
+      content: '•';
+      color: var(--orange);
+      display: inline-block;
+      width: 1rem;
+    }
+
+    .plan-action {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 122, 31, 0.12);
+      color: var(--white);
+      border: 1px solid rgba(255, 122, 31, 0.24);
+      padding: 0.95rem 1.4rem;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .plan-action:hover {
+      background: var(--orange);
+      color: #111;
+    }
+
+    .contact-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 2rem;
+      border-radius: 24px;
+    }
+
+    .contact-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .field label {
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+
+    .input,
+    .textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--white);
+      border-radius: 16px;
+      padding: 0.95rem 1rem;
+      font: inherit;
+    }
+
+    .textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .form-submit:hover {
+      background: var(--orange-soft);
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .fade-in:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .fade-in:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+    .fade-in:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    .fade-in:nth-child(4) {
+      animation-delay: 0.25s;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .pricing-cards,
+    .contact-grid {
+      opacity: 0;
+      animation: fadeInUp 0.9s ease forwards;
+    }
+
+    .pricing-cards {
+      animation-delay: 0.1s;
+    }
+
+    .contact-grid {
+      animation-delay: 0.12s;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .hero {
+        padding-top: 4rem;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">English<span>Dashboard</span></div>
+        <div class="nav-links">
+          <a href="#recursos">Recursos</a>
+          <a href="#como-funciona">Como funciona</a>
+          <a href="#planos">Planos</a>
+          <a href="#plataforma">Plataforma</a>
+          <a href="#plataforma" class="btn-nav">Área do aluno</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="badge">🇺🇸 Aulas online de inglês</div>
+        <h1>Aprenda inglês com <span>método, consistência</span> e resultado real.</h1>
+        <p>Tenha aulas particulares por Zoom ou Skype, material exclusivo e um sistema de acompanhamento que mostra seu progresso de verdade.</p>
+        <div class="hero-btns">
+          <a href="#plataforma" class="btn-primary">Acessar a plataforma</a>
+          <a href="#como-funciona" class="btn-secondary">Ver como funciona</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="features container" id="recursos">
+      <h2 class="section-title">Tudo que você precisa para aprender</h2>
+      <p class="section-sub">Uma plataforma clara, organizada e pensada para o aluno que busca resultado rápido e acompanhamento contínuo.</p>
+      <div class="cards">
+        <article class="card">
+          <div class="card-icon">📅</div>
+          <h3>Agenda inteligente</h3>
+          <p>Marque suas aulas, confirme horários e receba lembretes para manter a rotina sempre em dia.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">📂</div>
+          <h3>Conteúdo personalizado</h3>
+          <p>Receba PDFs, exercícios e tarefas práticos com base no seu nível e nos seus objetivos.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">📊</div>
+          <h3>Progresso visível</h3>
+          <p>Veja cada etapa do seu avanço, feedback do professor e metas alcançadas ao longo do curso.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon">💬</div>
+          <h3>Aulas ao vivo</h3>
+          <p>Conecte-se diretamente por Zoom ou Skype sem complicação e com suporte durante a aula.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="features container" id="como-funciona">
+      <h2 class="section-title">Como funciona</h2>
+      <p class="section-sub">Três passos simples para você iniciar o estudo e manter o ritmo.</p>
+      <div class="steps">
+        <article class="step">
+          <div class="step-icon">1️⃣</div>
+          <h3>Escolha seu plano</h3>
+          <p>Defina quantas aulas por semana você quer, qual é o seu foco e receba um plano de estudos personalizado.</p>
+        </article>
+        <article class="step">
+          <div class="step-icon">2️⃣</div>
+          <h3>Agende sua aula</h3>
+          <p>Selecione o horário que funciona para você e mantenha a agenda atualizada dentro do dashboard.</p>
+        </article>
+        <article class="step">
+          <div class="step-icon">3️⃣</div>
+          <h3>Receba feedback</h3>
+          <p>Após cada aula, confira observações, tarefas e recomendações para continuar evoluindo.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="pricing container" id="planos">
+      <h2 class="section-title">Planos para todos os objetivos</h2>
+      <p class="section-sub">Escolha o plano ideal para sua rotina e comece a evoluir com aulas adaptadas ao seu ritmo.</p>
+      <div class="pricing-cards">
+        <article class="plan-card fade-in">
+          <h3>Plano Essencial</h3>
+          <p class="price">R$ 149/mês</p>
+          <ul class="plan-list">
+            <li>1 aula semanal</li>
+            <li>Material básico</li>
+            <li>Relatório mensal</li>
+          </ul>
+          <a href="#plataforma" class="plan-action">Escolher esse plano</a>
+        </article>
+        <article class="plan-card fade-in">
+          <h3>Plano Intensivo</h3>
+          <p class="price">R$ 249/mês</p>
+          <ul class="plan-list">
+            <li>2 aulas semanais</li>
+            <li>Material personalizado</li>
+            <li>Acompanhamento contínuo</li>
+          </ul>
+          <a href="#plataforma" class="plan-action">Escolher esse plano</a>
+        </article>
+        <article class="plan-card fade-in">
+          <h3>Plano Premium</h3>
+          <p class="price">R$ 349/mês</p>
+          <ul class="plan-list">
+            <li>3 aulas semanais</li>
+            <li>Feedback prioritário</li>
+            <li>Plano de metas mensal</li>
+          </ul>
+          <a href="#plataforma" class="plan-action">Escolher esse plano</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="features container">
+      <h2 class="section-title">Depoimentos</h2>
+      <p class="section-sub">Alunos reais, progresso real e feedback direto do método.</p>
+      <div class="testimonials">
+        <article class="testimonial-card fade-in">
+          <blockquote>"O método é prático e eu já me sinto mais confiante nas conversas do dia a dia. O material está sempre atualizado."</blockquote>
+          <cite>— Mariana, estudante de medicina</cite>
+        </article>
+        <article class="testimonial-card fade-in">
+          <blockquote>"As aulas são bem organizadas e o professor acompanha cada etapa. Em poucas semanas já notei melhora na pronúncia."</blockquote>
+          <cite>— Carlos, analista de TI</cite>
+        </article>
+      </div>
+    </section>
+
+    <section class="platform container" id="plataforma">
+      <h2 class="section-title">Acesse a plataforma</h2>
+      <p class="section-sub">Área exclusiva para alunos matriculados com agenda, material e aulas integradas.</p>
+      <div class="platform-box">
+        <h3>Entre com seu acesso</h3>
+        <p>Acesse seus horários, materiais e inicie sua aula online em poucos cliques. Tudo centralizado em um só lugar.</p>
+        <div class="online-badges">
+          <span class="obadge">📹 Zoom</span>
+          <span class="obadge">💻 Skype</span>
+          <span class="obadge">📄 Materiais PDF</span>
+        </div>
+        <div class="hero-btns">
+          <a href="#" class="btn-primary">Entrar na plataforma →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact container" id="contato">
+      <h2 class="section-title">Fale conosco</h2>
+      <p class="section-sub">Tem dúvida ou quer começar agora? Envie uma mensagem e retornamos em até 24 horas.</p>
+      <div class="contact-grid">
+        <div class="contact-card fade-in">
+          <h3>Vamos conversar</h3>
+          <form action="#" method="post">
+            <div class="form-grid">
+              <div class="field">
+                <label for="nome">Nome</label>
+                <input id="nome" class="input" type="text" placeholder="Seu nome" />
+              </div>
+              <div class="field">
+                <label for="email">Email</label>
+                <input id="email" class="input" type="email" placeholder="seu@email.com" />
+              </div>
+              <div class="field">
+                <label for="mensagem">Mensagem</label>
+                <textarea id="mensagem" class="textarea" placeholder="Como podemos ajudar?"></textarea>
+              </div>
+            </div>
+            <button type="submit" class="form-submit">Enviar mensagem</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 <span>EnglishDashboard</span> — Aulas particulares de inglês online.</p>
+    </div>
+  </footer>
+</body>
+
+</html>
