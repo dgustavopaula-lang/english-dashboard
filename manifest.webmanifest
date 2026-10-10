@@ -1,0 +1,19 @@
+{
+  "name": "English Dashboard",
+  "short_name": "English",
+  "description": "Dashboard de aulas particulares de inglês.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d0d0d",
+  "theme_color": "#ff7a1f",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
